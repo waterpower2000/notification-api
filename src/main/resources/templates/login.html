@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/blank_layout.html}">
+
+<head>
+    <title>Log In</title>
+</head>
+
+<body>
+<main id="content" class="site-main" layout:fragment="content">
+    <form class="user" th:action="@{/performLogin.html}" method="post">
+        <div class="form-group">
+            <!--            <label for="app_username">User Name</label>-->
+            <input type="text" id="app_username" name="app_username" class="form-control form-control-user" placeholder="Enter Email Address..." required>
+        </div>
+        <div class="form-group">
+            <!--            <label for="app_password">Password</label>-->
+            <input type="password" id="app_password" name="app_password" class="form-control form-control-user" placeholder="Password" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-user btn-block">
+            Login
+        </button>
+
+        <br>
+        <a th:href="@{reset/password}" class="btn btn-link mx-auto d-block">Reset Password</a>
+
+
+    </form>
+</main>
+</body>
+
+</html>

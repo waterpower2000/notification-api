@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/home_layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Student Data</title>
+</head>
+<body>
+    <main id="content" class="site-main" layout:fragment="content">
+        <div class="container-fluid">
+            <div class="alert alert-primary py-3 my-3" role="alert" th:text="${'Request ID: '+record.requestId}">
+
+            </div>
+
+            <div class="alert alert-warning py-3 my-3" role="alert" th:if="${!record.warning.isEmpty()}">
+                <div th:each="w: ${record.warning}" th:text="${w}"></div>
+            </div>
+
+            <div class="alert alert-danger py-3 my-3" role="alert" th:if="${!record.error.isEmpty()}">
+                <div th:each="e: ${record.error}" th:text="${e}"></div>
+            </div>
+
+            <div class="row" th:if="${record.error.isEmpty() && (!record.newEntry.isEmpty() || !record.updatedEntry.isEmpty())}">
+                <div class="col-12 text-center">
+                    <a class="btn btn-sm btn-success" th:href="@{'/app/students/bulk/confirm?requestId='+${record.requestId}}">Proceed</a>
+                    <a class="btn btn-sm btn-danger" th:href="@{/app/students/all}">Back</a>
+                </div>
+            </div>
+
+            <div class="text-center mt-5" th:if="${!record.error.isEmpty()}">
+                <form class="user" th:action="@{/app/students/bulk/}" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-sm-12 mt-2">
+                                    <label for="studentBulkUploadFile" class="form-label">
+                                        Warnings are allowed to proceed if you choose to fix them later.
+                                        Please fix all the error and upload again.
+                                    </label>
+                                    <input class="form-control" type="file" name="file" id="studentBulkUploadFile">
+                                </div>
+
+                                <div class="col-sm-12 mt-2 pt-2 text-center">
+                                    <button class="btn btn-primary btn-sm w-25" th:style="@{border-radius:5px}" type="submit">UPLOAD</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div th:if="${record.error.isEmpty()}">
+                <nav>
+                    <ul class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="nav-new-tab" data-toggle="tab" data-target="#nav-new" type="button" role="tab" aria-controls="nav-new" aria-selected="true" th:text="${'New ('+record.newEntry.size()+')'}"></button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="nav-change-tab" data-toggle="tab" data-target="#nav-change" type="button" role="tab" aria-controls="nav-change" aria-selected="true" th:text="${'Change ('+record.updatedEntry.size()+')'}">Change</button>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-new" role="tabpanel" aria-labelledby="nav-new-tab">
+                        <div class="w-100 text-center mt-5" th:if="${record.newEntry.isEmpty()}">
+                            No new change is made.
+                        </div>
+                        <div class="w-100 text-center mt-2" th:if="${!record.newEntry.isEmpty()}">
+                            <table class="table table-bordered" id="dataTable">
+                                <thead>
+                                    <tr th:style="'background: #365bc7; color: white'">
+                                        <th>Class</th>
+                                        <th>Roll No</th>
+                                        <th>Admission No</th>
+                                        <th>Name</th>
+                                        <th>Phone No</th>
+                                        <th>Email ID</th>
+                                        <th>DOB</th>
+                                        <th>BG</th>
+                                        <th>Parent</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr th:each="student : ${record.newEntry}">
+                                        <td th:text="${student.get('CLASS_NAME')}"></td>
+                                        <td th:text="${student.get('STUDENT_ROLL')}"></td>
+                                        <td th:text="${student.get('ADMISSION_NO')}"></td>
+                                        <td th:text="${student.get('STUDENT_NAME')}"></td>
+                                        <td th:text="${student.get('PHONE_NUMBER')}"></td>
+                                        <td th:text="${student.get('STUDENT_EMAIL')}"></td>
+                                        <td th:text="${student.get('STUDENT_DOB')}"></td>
+                                        <td th:text="${student.get('STUDENT_BG')}"></td>
+                                        <td th:text="${student.get('STUDENT_PARENT_NAME')}"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-change" role="tabpanel" aria-labelledby="nav-change-tab">
+                        <div class="w-100 text-center mt-5" th:if="${record.updatedEntry.isEmpty()}">
+                            No changes made to existing record.
+                        </div>
+                        <div class="w-100 text-center mt-2" th:if="${!record.updatedEntry.isEmpty()}">
+                            <table class="table table-bordered" id="dataTable1">
+                                <thead>
+                                <tr th:style="'background: #365bc7; color: white'">
+                                    <th>Class</th>
+                                    <th>Roll No</th>
+                                    <th>Admission No</th>
+                                    <th>Name</th>
+                                    <th>Phone No</th>
+                                    <th>Email ID</th>
+                                    <th>DOB</th>
+                                    <th>BG</th>
+                                    <th>Parent</th>
+                                    <th>Change</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr th:each="student : ${record.updatedEntry}">
+                                    <td th:text="${student.get('CLASS_NAME')}"></td>
+                                    <td th:text="${student.get('STUDENT_ROLL')}"></td>
+                                    <td th:text="${student.get('ADMISSION_NO')}"></td>
+                                    <td th:text="${student.get('STUDENT_NAME')}"></td>
+                                    <td th:text="${student.get('PHONE_NUMBER')}"></td>
+                                    <td th:text="${student.get('STUDENT_EMAIL')}"></td>
+                                    <td th:text="${student.get('STUDENT_DOB')}"></td>
+                                    <td th:text="${student.get('STUDENT_BG')}"></td>
+                                    <td th:text="${student.get('STUDENT_PARENT_NAME')}"></td>
+                                    <td th:text="${student.get('CHANGE')}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
