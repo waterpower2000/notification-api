@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/home_layout.html}">
+
+<head>
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{https://getbootstrap.com/docs/5.3/assets/css/docs.css}" rel="stylesheet">
+    <script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js}">
+	</script>
+    <!-- Custom styles for this template-->
+    <title>Update group</title>
+</head>
+
+<body>
+<main id="content" class="site-main" layout:fragment="content">
+    <div class="container">
+
+        <div class="">
+            <div class="">
+                <!-- Nested Row within Card Body -->
+                <div class="row">
+                    <div class="col-lg-6" th:style="@{margin:auto;}">
+                        <div class="p-2">
+                            <div th:if="${session.message}" class="container">
+                                <div class="alert alert-success text-center" role="alert">
+                                    <span th:text="${session.message.content}"></span>
+                                </div>
+
+                                <th:block th:text="${#session.removeAttribute('message')}"></th:block>
+                            </div>
+
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Update Group</h1>
+                            </div>
+                            <form class="user" th:action="@{/app/groups/update/{id}(id=${groups.groupId})}" method="post" th:object="${groups}" >
+
+                                <div class="form-group" >
+                                    <input  type="text" th:field="*{groupName}"  th:value="${groups.groupName}" class="form-control" id="groupName" placeholder="Group Name">
+                                </div>
+
+
+                                <div class="form-group" th:style="@{padding: 0 74px;}">
+                                    <button class="btn btn-primary btn-user btn-block" th:style="@{border-radius:5px;}" type="submit">UPDATE</button>
+                                </div>
+                            </form>
+                            <!--              <div class="text-center">-->
+                            <!--                <a class="small" href="forgot-password.html">Forgot Password?</a>-->
+                            <!--              </div>-->
+                            <!--              <div class="text-center">-->
+                            <!--                <a class="small" href="login.html">Already have an account? Login!</a>-->
+                            <!--              </div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--  </div>-->
+
+</main>
+</body>
+
+</html>
